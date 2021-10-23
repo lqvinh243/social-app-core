@@ -7,6 +7,4 @@ router.post("/register", validateModel(userValidate.userCreate), authBusiness.re
 
 router.post("/login", validateModel(userValidate.userLogin), authBusiness.login);
 
-router.post("/refresh_token", authBusiness.generateAccessToken);
-
 module.exports = router;

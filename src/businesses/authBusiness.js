@@ -1,7 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../config/index");
+const { ACCESS_TOKEN_SECRET } = require("../config/index");
 
 const authBusiness = {
   register: async (req, res) => {
@@ -48,13 +48,6 @@ const authBusiness = {
       if (!isMatch) return res.status(400).json({ msg: "Password is incorrect." });
 
       const accessToken = createAccessToken({ id: user._id });
-      const refreshToken = createRefreshToken({ id: user._id });
-
-      res.cookie("refreshtoken", refreshToken, {
-        httpOnly: true,
-        path: "/api/refreshToken",
-        maxAge: 30 * 24 * 60 * 60 * 1000 // 30days
-      });
 
       res.json({
         msg: "Login Success!",
@@ -96,10 +89,6 @@ const authBusiness = {
 
 const createAccessToken = (payload) => {
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
-};
-
-const createRefreshToken = (payload) => {
-  return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "30d" });
 };
 
 module.exports = authBusiness;
