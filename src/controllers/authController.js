@@ -7,4 +7,6 @@ router.post("/register", validateModel(userValidate.userCreate), authBusiness.re
 
 router.post("/login", validateModel(userValidate.userLogin), authBusiness.login);
 
+router.post("/verify-capcha", authBusiness.verifyCapcha);
+
 module.exports = router;

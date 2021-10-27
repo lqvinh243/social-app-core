@@ -2,6 +2,7 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN_SECRET } = require("../config/index");
+const { siteVerify } = require("../service/capcha");
 
 const authBusiness = {
   register: async (req, res) => {
@@ -84,6 +85,10 @@ const authBusiness = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+  },
+  verifyCapcha: async (req, res) => {
+    const { response } = req;
+    return await siteVerify(response);
   }
 };
 

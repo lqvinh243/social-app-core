@@ -13,3 +13,7 @@ module.exports.PORT = process.env.PORT ?? 3000;
 module.exports.CLOUD_NAME = process.env.CLOUD_NAME ?? "";
 module.exports.API_KEY = process.env.API_KEY ?? "";
 module.exports.API_SECRET = process.env.API_SECRET ?? "";
+
+// Capcha
+module.exports.CAPCHA_BASE_URL = process.env.CAPCHA_BASE_URL ?? "";
+module.exports.CAPCHA_SECRET_KEY = process.env.CAPCHA_SECRET_KEY ?? "";
