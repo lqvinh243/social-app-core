@@ -103,7 +103,6 @@ const authBusiness = {
         .populate("followers following", "avatar fullname followers following");
 
       if (!user) return res.status(400).json({ msg: "This email does not exist." });
-
       const accessToken = createAccessToken({ id: user._id });
       res.json({
         msg: "Auth Success!",
