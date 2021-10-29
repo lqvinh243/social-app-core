@@ -5,6 +5,7 @@ module.exports.MONGODB_URL = process.env.MONGODB_URL ?? "";
 
 // Authenticated
 module.exports.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET ?? "";
+module.exports.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? "";
 
 // Api
 module.exports.PORT = process.env.PORT ?? 3000;
