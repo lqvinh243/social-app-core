@@ -11,4 +11,8 @@ router.post("/auths/login", validateModel(userValidate.userLogin), authBusiness.
 
 router.post("/auths/verify-capcha", authBusiness.verifyCapcha);
 
+router.post("/auths/logout", authBusiness.logout);
+
+router.post("/auths/refreshtoken", authBusiness.generateAccessToken);
+
 module.exports = router;
