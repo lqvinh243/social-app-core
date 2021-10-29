@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const SocketServer = require("./socketServer");
 const { ExpressPeerServer } = require("peer");
 const { MONGODB_URL, PORT } = require("./config/index");
 const morgan = require("morgan");
 const { combineController } = require("./commom/index");
+const { initSocketServer } = require("./service/socket/socketServer");
 
 module.exports.start = (callback) => {
   const app = express();
@@ -33,11 +33,7 @@ module.exports.start = (callback) => {
 
   // Socket
   const http = require("http").createServer(app);
-  const io = require("socket.io")(http);
-
-  io.on("connection", socket => {
-    SocketServer(socket);
-  });
+  initSocketServer(http);
 
   ExpressPeerServer(http, { path: "/" });
   combineController(app);

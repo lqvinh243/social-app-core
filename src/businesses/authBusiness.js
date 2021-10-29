@@ -26,7 +26,7 @@ const authBusiness = {
 
       res.json({
         msg: "Register Success!",
-        accessToken,
+        token: accessToken,
         user: {
           ...newUser._doc,
           password: ""
@@ -59,7 +59,7 @@ const authBusiness = {
 
       res.json({
         msg: "Login Success!",
-        accessToken,
+        token: accessToken,
         user: {
           ...user._doc,
           password: ""
@@ -93,7 +93,7 @@ const authBusiness = {
         const accessToken = createAccessToken({ id: result.id });
 
         res.json({
-          accessToken,
+          token: accessToken,
           user
         });
       });
@@ -102,8 +102,34 @@ const authBusiness = {
     }
   },
   verifyCapcha: async (req, res) => {
-    const { response } = req;
-    return await siteVerify(response);
+    const { response } = req.body;
+    res.json(await siteVerify(response));
+  },
+  verifyToken: async (req, res) => {
+    try {
+      const { token } = req.body;
+
+      if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
+
+      const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
+      if (!decoded) return res.status(400).json({ msg: "Invalid Authentication." });
+
+      const user = await Users.findOne({ _id: decoded.id })
+        .populate("followers following", "avatar fullname followers following");
+
+      if (!user) return res.status(400).json({ msg: "This email does not exist." });
+      const accessToken = createAccessToken({ id: user._id });
+      res.json({
+        msg: "Auth Success!",
+        token: accessToken,
+        user: {
+          ...user._doc,
+          password: ""
+        }
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
   }
 };
 
