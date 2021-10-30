@@ -47,7 +47,7 @@ const messageBusiness = {
 
       await newMessage.save();
 
-      send("chat", "new_message", recipient, text);
+      send("chat", "new_message", recipient, newMessage);
 
       res.json({ msg: "Create Success!" });
     } catch (err) {
