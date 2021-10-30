@@ -101,6 +101,25 @@ const authBusiness = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  resetPassword: async (req, res) => {
+    try {
+      const { oldPass, newPass } = req.body;
+      const user = await Users.findOne(req.user._id);
+      if (!user) {
+        return res.status(400).json({ msg: "This does not exist." });
+      }
+      if (!bcrypt.compareSync(oldPass, user.password)) {
+        return res.status(400).json({ msg: "Password not match." });
+      }
+      const passwordHash = await bcrypt.hash(newPass, 12);
+      await Users.findOneAndUpdate({ _id: req.user._id }, {
+        password: passwordHash
+      });
+      res.json({ msg: "Reset Success!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
   verifyCapcha: async (req, res) => {
     const { response } = req.body;
     res.json(await siteVerify(response));
