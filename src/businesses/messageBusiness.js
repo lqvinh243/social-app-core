@@ -72,8 +72,11 @@ const messageBusiness = {
     try {
       const features = new APIfeatures(Messages.find({
         $or: [
-          { sender: req.user._id, recipient: req.params.id },
-          { sender: req.params.id, recipient: req.user._id }
+          // { sender: req.user._id, recipient: req.params.id },
+          // { sender: req.params.id, recipient: req.user._id }
+          {
+            conversation: req.params.id
+          }
         ]
       }), req.query).paginating();
 
