@@ -1,15 +1,15 @@
 const router = require("express").Router();
 const auth = require("../middleware/auth");
-const notifyCtrl = require("../businesses/notifyBusiness");
+const notifyBusiness = require("../businesses/notifyBusiness");
 
-router.post("/notify", auth, notifyCtrl.createNotify);
+router.post("/notify", auth, notifyBusiness.createNotify);
 
-router.delete("/notify/:id", auth, notifyCtrl.removeNotify);
+router.delete("/notify/:id", auth, notifyBusiness.removeNotify);
 
-router.get("/notifies", auth, notifyCtrl.getNotifies);
+router.get("/notifies", auth, notifyBusiness.getNotifies);
 
-router.patch("/isReadNotify/:id", auth, notifyCtrl.isReadNotify);
+router.patch("/isReadNotify/:id", auth, notifyBusiness.isReadNotify);
 
-router.delete("/deleteAllNotify", auth, notifyCtrl.deleteAllNotifies);
+router.delete("/deleteAllNotify", auth, notifyBusiness.deleteAllNotifies);
 
 module.exports = router;

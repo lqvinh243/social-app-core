@@ -1,4 +1,6 @@
 const Users = require("../models/userModel");
+const Conversations = require("../models/conversationModel");
+const Messages = require("../models/messageModel");
 
 const userBusiness = {
   searchUser: async (req, res) => {
@@ -48,6 +50,28 @@ const userBusiness = {
       await Users.findOneAndUpdate({ _id: req.user._id }, {
         $push: { following: req.params.id }
       }, { new: true });
+
+      const message = `Hi ${newUser.fullname}, nice to meet you!`;
+      const sender = req.user._id;
+      const recipient = req.params.id;
+
+      const newConversation = await Conversations.findOneAndUpdate({
+        $or: [
+          { recipients: [sender, recipient] },
+          { recipients: [recipient, sender] }
+        ]
+      }, {
+        recipients: [sender, recipient],
+        text: message
+      }, { new: true, upsert: true });
+
+      const newMessage = new Messages({
+        conversation: newConversation._id,
+        sender,
+        recipient
+      });
+
+      await newMessage.save();
 
       res.json({ newUser });
     } catch (err) {
