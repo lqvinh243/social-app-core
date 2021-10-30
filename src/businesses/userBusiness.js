@@ -68,7 +68,8 @@ const userBusiness = {
       const newMessage = new Messages({
         conversation: newConversation._id,
         sender,
-        recipient
+        recipient,
+        text: message
       });
 
       await newMessage.save();
