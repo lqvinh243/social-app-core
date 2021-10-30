@@ -117,7 +117,7 @@ const userBusiness = {
     }
   },
   uploadAvatar: async (req, res) => {
-    const file = req.files[0];
+    const file = req.file;
     if (!file) { return res.status(500).json({ msg: "Please select file" }); }
     const avatar = await uploadSingle(file);
     await Users.findOneAndUpdate({ _id: req.user._id }, {
