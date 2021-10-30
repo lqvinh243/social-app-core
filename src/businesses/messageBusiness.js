@@ -1,5 +1,6 @@
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
+const { send } = require("../commom/socket/index");
 
 class APIfeatures {
   constructor (query, queryString) {
@@ -45,6 +46,8 @@ const messageBusiness = {
       });
 
       await newMessage.save();
+
+      send("chat", "new_message", recipient, text);
 
       res.json({ msg: "Create Success!" });
     } catch (err) {
