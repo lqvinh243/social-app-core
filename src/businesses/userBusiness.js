@@ -1,6 +1,7 @@
 const Users = require("../models/userModel");
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
+const { uploadSingle } = require("../service/storage/index");
 
 const userBusiness = {
   searchUser: async (req, res) => {
@@ -114,6 +115,16 @@ const userBusiness = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+  },
+  uploadAvatar: async (req, res) => {
+    const file = req.files[0];
+    if (!file) { return res.status(500).json({ msg: "Please select file" }); }
+    const avatar = await uploadSingle(file);
+    await Users.findOneAndUpdate({ _id: req.user._id }, {
+      avatar
+    });
+
+    res.json({ msg: "Update Success!", avatar });
   }
 };
 

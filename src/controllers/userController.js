@@ -7,6 +7,7 @@ router.get("/search", auth, userBusiness.searchUser);
 router.get("/user/:id", auth, userBusiness.getUser);
 
 router.patch("/user", auth, userBusiness.updateUser);
+router.patch("/user/avatar", auth, userBusiness.uploadAvatar);
 
 router.patch("/user/:id/follow", auth, userBusiness.follow);
 router.patch("/user/:id/unfollow", auth, userBusiness.unfollow);
