@@ -13,4 +13,6 @@ router.patch("/user/:id/unfollow", auth, userBusiness.unfollow);
 
 router.get("/suggestionsUser", auth, userBusiness.suggestionsUser);
 
+router.get("/users/countpost", auth, userBusiness.numOfPosts);
+
 module.exports = router;

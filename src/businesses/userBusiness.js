@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const Posts = require("../models/postModel");
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
 
@@ -26,11 +27,11 @@ const userBusiness = {
   },
   updateUser: async (req, res) => {
     try {
-      const {fullname,avatar, address, gender } = req.body;
+      const { fullname, avatar, address, gender } = req.body;
       if (!fullname) return res.status(400).json({ msg: "Please add your full name." });
 
       await Users.findOneAndUpdate({ _id: req.user._id }, {
-        fullname,avatar, address, gender
+        fullname, avatar, address, gender
       });
 
       res.json({ msg: "Update Success!" });
@@ -114,6 +115,10 @@ const userBusiness = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+  },
+  numOfPosts: async (req, res) => {
+    const numOfPosts = await Posts.find({ user: req.user._id }).count();
+    return res.json({ numOfPosts });
   }
 };
 
