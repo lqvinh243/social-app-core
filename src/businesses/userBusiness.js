@@ -118,7 +118,8 @@ const userBusiness = {
     }
   },
   numOfPosts: async (req, res) => {
-    const numOfPosts = await Posts.find({ user: req.user._id }).count();
+    const { userId } = req.query;
+    const numOfPosts = await Posts.find({ user: userId ?? req.user._id }).count();
     return res.json({ numOfPosts });
   },
   uploadAvatar: async (req, res) => {
