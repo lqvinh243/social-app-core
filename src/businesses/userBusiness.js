@@ -1,5 +1,5 @@
 const Users = require("../models/userModel");
-const { usersOnline } = require("../service/socket/channels/index");
+const { getUsersOnline } = require("../service/socket/channels/index");
 const Posts = require("../models/postModel");
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
@@ -119,7 +119,7 @@ const userBusiness = {
     }
   },
   listOnline: async (req, res) => {
-    res.json({ usersOnline });
+    res.json({ usersOnline: getUsersOnline() });
   },
   numOfPosts: async (req, res) => {
     const { userId } = req.query;
