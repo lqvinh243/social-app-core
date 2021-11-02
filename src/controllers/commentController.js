@@ -1,15 +1,15 @@
 const router = require("express").Router();
-const commentCtrl = require("../businesses/commentBusiness");
+const commentBusiness = require("../businesses/commentBusiness");
 const auth = require("../middleware/auth");
 
-router.post("/comment", auth, commentCtrl.createComment);
+router.post("/comment", auth, commentBusiness.createComment);
 
-router.patch("/comment/:id", auth, commentCtrl.updateComment);
+router.patch("/comment/:id", auth, commentBusiness.updateComment);
 
-router.patch("/comment/:id/like", auth, commentCtrl.likeComment);
+router.patch("/comment/:id/like", auth, commentBusiness.likeComment);
 
-router.patch("/comment/:id/unlike", auth, commentCtrl.unLikeComment);
+router.patch("/comment/:id/unlike", auth, commentBusiness.unLikeComment);
 
-router.delete("/comment/:id", auth, commentCtrl.deleteComment);
+router.delete("/comment/:id", auth, commentBusiness.deleteComment);
 
 module.exports = router;

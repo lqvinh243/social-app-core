@@ -1,5 +1,12 @@
 const Users = require("../models/userModel");
+<<<<<<< HEAD
 const { usersOnline } = require("../service/socket/channels/index");
+=======
+const Posts = require("../models/postModel");
+const Conversations = require("../models/conversationModel");
+const Messages = require("../models/messageModel");
+const { uploadSingle } = require("../service/storage/index");
+>>>>>>> c1582868cf496451adc639bc36bd333feebc4f9f
 
 const userBusiness = {
   searchUser: async (req, res) => {
@@ -25,11 +32,11 @@ const userBusiness = {
   },
   updateUser: async (req, res) => {
     try {
-      const { avatar, fullname, mobile, address, story, website, gender } = req.body;
+      const { fullname, address, gender, describeYourself } = req.body;
       if (!fullname) return res.status(400).json({ msg: "Please add your full name." });
 
       await Users.findOneAndUpdate({ _id: req.user._id }, {
-        avatar, fullname, mobile, address, story, website, gender
+        fullname, address, gender, describeYourself
       });
 
       res.json({ msg: "Update Success!" });
@@ -49,6 +56,29 @@ const userBusiness = {
       await Users.findOneAndUpdate({ _id: req.user._id }, {
         $push: { following: req.params.id }
       }, { new: true });
+
+      const message = `Hi ${newUser.fullname}, nice to meet you!`;
+      const sender = req.user._id;
+      const recipient = req.params.id;
+
+      const newConversation = await Conversations.findOneAndUpdate({
+        $or: [
+          { recipients: [sender, recipient] },
+          { recipients: [recipient, sender] }
+        ]
+      }, {
+        recipients: [sender, recipient],
+        text: message
+      }, { new: true, upsert: true });
+
+      const newMessage = new Messages({
+        conversation: newConversation._id,
+        sender,
+        recipient,
+        text: message
+      });
+
+      await newMessage.save();
 
       res.json({ newUser });
     } catch (err) {
@@ -93,6 +123,21 @@ const userBusiness = {
   },
   listOnline: async (req, res) => {
     res.json({ usersOnline });
+  },
+  numOfPosts: async (req, res) => {
+    const { userId } = req.query;
+    const numOfPosts = await Posts.find({ user: userId ?? req.user._id }).count();
+    return res.json({ numOfPosts });
+  },
+  uploadAvatar: async (req, res) => {
+    const file = req.file;
+    if (!file) { return res.status(500).json({ msg: "Please select file" }); }
+    const avatar = await uploadSingle(file);
+    await Users.findOneAndUpdate({ _id: req.user._id }, {
+      avatar
+    });
+
+    res.json({ msg: "Update Success!", avatar });
   }
 };
 

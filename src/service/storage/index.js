@@ -34,4 +34,10 @@ const upload = async (files) => {
   return results;
 };
 
+const uploadSingle = async (file) => {
+  const result = await streamUpload(file);
+  return result.url;
+};
+
 module.exports.upload = upload;
+module.exports.uploadSingle = uploadSingle;

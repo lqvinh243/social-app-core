@@ -1,5 +1,6 @@
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
+const { send } = require("../commom/socket/index");
 
 class APIfeatures {
   constructor (query, queryString) {
@@ -46,6 +47,8 @@ const messageBusiness = {
 
       await newMessage.save();
 
+      send("chat", "new_message", recipient, newMessage);
+
       res.json({ msg: "Create Success!" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -72,8 +75,11 @@ const messageBusiness = {
     try {
       const features = new APIfeatures(Messages.find({
         $or: [
-          { sender: req.user._id, recipient: req.params.id },
-          { sender: req.params.id, recipient: req.user._id }
+          // { sender: req.user._id, recipient: req.params.id },
+          // { sender: req.params.id, recipient: req.user._id }
+          {
+            conversation: req.params.id
+          }
         ]
       }), req.query).paginating();
 

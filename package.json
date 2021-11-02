@@ -2,7 +2,7 @@
   "name": "social",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "heroku-postbuild": "npm install",

@@ -1,7 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { ACCESS_TOKEN_SECRET } = require("../config/index");
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../config/index");
 const { siteVerify } = require("../service/capcha");
 
 const authBusiness = {
@@ -49,6 +49,13 @@ const authBusiness = {
       if (!isMatch) return res.status(400).json({ msg: "Password is incorrect." });
 
       const accessToken = createAccessToken({ id: user._id });
+      const refreshtoken = createRefreshToken({ id: user._id });
+
+      res.cookie("refreshtoken", refreshtoken, {
+        httpOnly: true,
+        path: "/api/v1/auths/refreshtoken",
+        maxAge: 30 * 24 * 60 * 60 * 1000 // 30days
+      });
 
       res.json({
         msg: "Login Success!",
@@ -58,6 +65,14 @@ const authBusiness = {
           password: ""
         }
       });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  logout: async (req, res) => {
+    try {
+      res.clearCookie("refreshtoken", { path: "/api/v1/auths/refreshtoken" });
+      return res.json({ msg: "Logoged out" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -82,6 +97,25 @@ const authBusiness = {
           user
         });
       });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  resetPassword: async (req, res) => {
+    try {
+      const { oldPass, newPass } = req.body;
+      const user = await Users.findOne(req.user._id);
+      if (!user) {
+        return res.status(400).json({ msg: "This does not exist." });
+      }
+      if (!bcrypt.compareSync(oldPass, user.password)) {
+        return res.status(400).json({ msg: "Password not match." });
+      }
+      const passwordHash = await bcrypt.hash(newPass, 12);
+      await Users.findOneAndUpdate({ _id: req.user._id }, {
+        password: passwordHash
+      });
+      res.json({ msg: "Reset Success!" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -122,4 +156,7 @@ const createAccessToken = (payload) => {
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 };
 
+const createRefreshToken = (payload) => {
+  return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "30d" });
+};
 module.exports = authBusiness;

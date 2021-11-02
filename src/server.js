@@ -37,7 +37,7 @@ module.exports.start = (callback) => {
 
   ExpressPeerServer(http, { path: "/" });
   combineController(app);
-
+  console.log(MONGODB_URL);
   mongoose.connect(MONGODB_URL, {
     useCreateIndex: true,
     useFindAndModify: false,

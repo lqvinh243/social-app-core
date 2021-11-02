@@ -1,15 +1,15 @@
 const router = require("express").Router();
-const messageCtrl = require("../businesses/messageBusiness");
+const messageBusiness = require("../businesses/messageBusiness");
 const auth = require("../middleware/auth");
 
-router.post("/message", auth, messageCtrl.createMessage);
+router.post("/message", auth, messageBusiness.createMessage);
 
-router.get("/conversations", auth, messageCtrl.getConversations);
+router.get("/conversations", auth, messageBusiness.getConversations);
 
-router.get("/message/:id", auth, messageCtrl.getMessages);
+router.get("/message/:id", auth, messageBusiness.getMessages);
 
-router.delete("/message/:id", auth, messageCtrl.deleteMessages);
+router.delete("/message/:id", auth, messageBusiness.deleteMessages);
 
-router.delete("/conversation/:id", auth, messageCtrl.deleteConversation);
+router.delete("/conversation/:id", auth, messageBusiness.deleteConversation);
 
 module.exports = router;
