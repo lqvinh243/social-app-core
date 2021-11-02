@@ -1,12 +1,9 @@
 const Users = require("../models/userModel");
-<<<<<<< HEAD
 const { usersOnline } = require("../service/socket/channels/index");
-=======
 const Posts = require("../models/postModel");
 const Conversations = require("../models/conversationModel");
 const Messages = require("../models/messageModel");
 const { uploadSingle } = require("../service/storage/index");
->>>>>>> c1582868cf496451adc639bc36bd333feebc4f9f
 
 const userBusiness = {
   searchUser: async (req, res) => {
