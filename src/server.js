@@ -46,7 +46,6 @@ module.exports.start = (callback) => {
   }, err => {
     if (err) throw err;
     console.log("Connected to mongodb");
+    return http.listen(PORT, callback);
   });
-
-  return http.listen(PORT, callback);
 };

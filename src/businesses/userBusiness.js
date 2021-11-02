@@ -1,4 +1,5 @@
 const Users = require("../models/userModel");
+const { usersOnline } = require("../service/socket/channels/index");
 
 const userBusiness = {
   searchUser: async (req, res) => {
@@ -89,6 +90,9 @@ const userBusiness = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+  },
+  listOnline: async (req, res) => {
+    res.json({ usersOnline });
   }
 };
 
