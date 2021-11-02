@@ -2,6 +2,7 @@ const Posts = require("../models/postModel");
 const Comments = require("../models/commentModel");
 const Users = require("../models/userModel");
 const { upload } = require("../service/storage");
+const { sendNsp } = require("../commom/socket/index");
 
 class APIfeatures {
   constructor (query, queryString) {
@@ -104,6 +105,7 @@ const postBusiness = {
       }, { new: true });
 
       if (!like) return res.status(400).json({ msg: "This post does not exist." });
+      sendNsp("like", "like_post", { id: req.params.id, user: { ...req.user._doc } });
 
       res.json({ msg: "Liked Post!" });
     } catch (err) {
@@ -117,7 +119,7 @@ const postBusiness = {
       }, { new: true });
 
       if (!like) return res.status(400).json({ msg: "This post does not exist." });
-
+      sendNsp("like", "unlike_post", { id: req.params.id, user: { ...req.user._doc } });
       res.json({ msg: "UnLiked Post!" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });

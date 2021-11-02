@@ -2,7 +2,7 @@ const { ACCESS_TOKEN_SECRET } = require("../../../config/index");
 const jwt = require("jsonwebtoken");
 
 function initChannel (io) {
-  const nsp = io.of("/chat");
+  const nsp = io.of("/like");
   nsp.use((socket, next) => {
     const token = (socket.handshake.auth).token;
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
@@ -12,7 +12,6 @@ function initChannel (io) {
 
   nsp.on("connection", (socket) => {
     if (!socket.userAuthId) { socket.disconnect(); }
-    socket.join(socket.userAuthId);
   });
 }
 
