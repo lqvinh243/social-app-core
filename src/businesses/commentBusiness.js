@@ -1,5 +1,6 @@
 const Comments = require("../models/commentModel");
 const Posts = require("../models/postModel");
+const { sendNsp } = require("../commom/socket/index");
 
 const commentBusiness = {
   createComment: async (req, res) => {
@@ -23,6 +24,8 @@ const commentBusiness = {
       }, { new: true });
 
       await newComment.save();
+
+      sendNsp("comment", "comment_post", { ...newComment._doc, user: { ...req.user._doc } });
 
       res.json({ newComment });
     } catch (err) {
