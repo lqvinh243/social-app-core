@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { ExpressPeerServer } = require("peer");
 const { MONGODB_URL, PORT } = require("./config/index");
 const morgan = require("morgan");
 const { combineController } = require("./commom/index");
@@ -35,7 +34,6 @@ module.exports.start = (callback) => {
   const http = require("http").createServer(app);
   initSocketServer(http);
 
-  ExpressPeerServer(http, { path: "/" });
   combineController(app);
   mongoose.connect(MONGODB_URL, {
     useCreateIndex: true,
