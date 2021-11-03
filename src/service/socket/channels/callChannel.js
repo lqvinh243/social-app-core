@@ -39,8 +39,10 @@ function initChannel (io) {
 
     socket.on("cancel_call", (userId) => {
       usersInCall = usersInCall.filter(item => item !== socket.userAuthId);
-      console.log(userId);
-      if (userId) { socket.nsp.to(userId).emit("cancel_call"); }
+      if (userId) {
+        usersInCall = usersInCall.filter(item => item !== userId);
+        socket.nsp.to(userId).emit("cancel_call");
+      }
     });
 
     socket.on("disconnect", () => {
