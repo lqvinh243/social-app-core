@@ -4,7 +4,7 @@ const { cpus } = require("os");
 const process = require("process");
 const numCPUs = cpus().length;
 
-if (cluster.isPrimary) {
+if (cluster.isMaster) {
   console.log(`Primary ${process.pid} is running`);
 
   for (let i = 0; i < numCPUs; i++) {
