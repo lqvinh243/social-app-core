@@ -18,3 +18,8 @@ module.exports.API_SECRET = process.env.API_SECRET ?? "";
 // Capcha
 module.exports.CAPCHA_BASE_URL = process.env.CAPCHA_BASE_URL ?? "";
 module.exports.CAPCHA_SECRET_KEY = process.env.CAPCHA_SECRET_KEY ?? "";
+
+// Redis
+module.exports.REDIS_HOST = process.env.REDIS_HOST ?? "";
+module.exports.REDIS_PORT = process.env.REDIS_PORT ?? "";
+module.exports.REDIS_PASSWORD = process.env.REDIS_PASSWORD ?? "";
